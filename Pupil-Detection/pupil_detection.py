@@ -91,7 +91,7 @@ sobelImgV = convolve2d(test_img, sobelKernelV, mode='same', boundary='symm', fil
 sobelImgGrad = np.sqrt(np.square(sobelImgH) + np.square(sobelImgV))
 print_img("Sobel Image Gradient", sobelImgGrad, normalize=True)
 
-# Create a kernel consisting of 1s and 0s with 1s in the shape of a 35-45px ring
+# Create a kernel consisting of 1s and 0s with 1s in the shape of a 35-45px ring.
 ringKernel = np.zeros((128, 128))
 for y in range(0, 128):
     for x in range(0, 128):
@@ -101,16 +101,26 @@ for y in range(0, 128):
             ringKernel[x, y] = 1.0
 print_img("Ring Kernel", ringKernel, normalize=True)
 
-# Convolve the ring kernel and iris image
+# Convolve the ring kernel and iris image.
 irisRingImg = convolve2d(sobelImgGrad, ringKernel, mode='same', boundary='symm', fillvalue=0)
 irisRingImg = irisRingImg * 1 / np.sum(ringKernel)
 print_img("Ring Convolution", irisRingImg, normalize=True)
 
-# Apply thresholding to remove all but the most important features
+# Apply thresholding to remove all but the most important features.
 for y in range(0, height):
     for x in range(0, width):
         if irisRingImg[y, x] < 80:
             irisRingImg[y, x] = 0
 print_img("Thresholding", irisRingImg, normalize=True)
+
+# Identify the center of the pupil on the original image/
+for index_x, x in enumerate(irisRingImg):
+    for index_px, px in enumerate(x):
+        if px[SAT] < normal_sat(90):
+            px[SAT] = normal_sat(90)
+        if px[VAL] > normal_val(30):
+            px[HUE] = normal_hue(300)
+            px[VAL] = normal_val(35)
+            final_img[index_x, index_px] = px
 
 # The bright point of this final image represents the location of the center of the pupil in the image.
