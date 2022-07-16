@@ -6,9 +6,10 @@ Four demos of image processing concepts.
 
 2. Pupil Detection
 
-3. Filter Demonstrations
+3. Staff Line Detection
 
-4. Staff Line Detection
+4. Filter Demonstrations
+
 
 ## 1. Image Enhancement
 
@@ -56,7 +57,7 @@ the grayscale background.
 
 ### Goal:
 
-Demonstrate the filters most commonly used in image processing. Use masking for speed whenever possible.
+Identify the location of the center of a pupil given an image of an eye.
 
 ### Results:
 
@@ -78,7 +79,7 @@ src="https://github.com/brendan-bassett/Image-Processing/blob/main/Pupil-Detecti
 Final Result:
 
 <img alt="Final Result" width="300" height="auto" 
-src=""/>
+src="https://github.com/brendan-bassett/Image-Processing/blob/main/Pupil-Detection/output/iris_final_result.jpg"/>
 
 
 ### Conclusions:
@@ -92,6 +93,16 @@ thresholding to remove all but the very most important ring location information
 the exact center of the pupil within the original image.
 
 ## 3. Filter Demonstrations
+
+### Goal:
+
+
+### Results:
+
+
+### Conclusions:
+
+## 4. Filter Demonstrations
 
 ### Goal:
 
