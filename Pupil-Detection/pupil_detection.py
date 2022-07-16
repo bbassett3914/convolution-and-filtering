@@ -74,9 +74,9 @@ def print_img(title: str, img, show_type: int = NONE, normalize: bool = False, s
 # ======================================================================================================================
 
 test_img = cv.imread(TEST_IMG + BMP)
-test_img = cv.cvtColor(test_img, cv.COLOR_BGR2GRAY)
-print_img(TEST_IMG + BMP, test_img)
-height, width = test_img.shape
+test_img_gray = cv.cvtColor(test_img, cv.COLOR_BGR2GRAY)
+print_img(TEST_IMG + BMP, test_img_gray)
+height, width = test_img_gray.shape
 
 # Calculate the Sobel Gradient Edge.
 sobelKernelH = np.array([
@@ -86,8 +86,8 @@ sobelKernelH = np.array([
 ])
 sobelKernelV = sobelKernelH.T
 
-sobelImgH = convolve2d(test_img, sobelKernelH, mode='same', boundary='symm', fillvalue=0)
-sobelImgV = convolve2d(test_img, sobelKernelV, mode='same', boundary='symm', fillvalue=0)
+sobelImgH = convolve2d(test_img_gray, sobelKernelH, mode='same', boundary='symm', fillvalue=0)
+sobelImgV = convolve2d(test_img_gray, sobelKernelV, mode='same', boundary='symm', fillvalue=0)
 sobelImgGrad = np.sqrt(np.square(sobelImgH) + np.square(sobelImgV))
 print_img("Sobel Image Gradient", sobelImgGrad, normalize=True)
 
@@ -113,14 +113,12 @@ for y in range(0, height):
             irisRingImg[y, x] = 0
 print_img("Thresholding", irisRingImg, normalize=True)
 
-# Identify the center of the pupil on the original image/
-for index_x, x in enumerate(irisRingImg):
-    for index_px, px in enumerate(x):
-        if px[SAT] < normal_sat(90):
-            px[SAT] = normal_sat(90)
-        if px[VAL] > normal_val(30):
-            px[HUE] = normal_hue(300)
-            px[VAL] = normal_val(35)
-            final_img[index_x, index_px] = px
-
 # The bright point of this final image represents the location of the center of the pupil in the image.
+
+# Identify the center of the pupil in green on the original image.
+for index_x, x in enumerate(irisRingImg):
+    for index_px, val in enumerate(x):
+        if val >= 80:
+            test_img[index_x, index_px] = [0, 255, 0]
+
+print_img("Final Result", test_img, normalize=False)
