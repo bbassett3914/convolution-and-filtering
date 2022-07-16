@@ -19,13 +19,13 @@ from scipy.signal import convolve2d
 # Setup
 # ======================================================================================================================
 
-REZZ_IMG = "RezzSelfie"
+TEST_IMG = "RezzSelfie"
 JPG = ".jpg"
 BMP = ".bmp"
 
 ROOT_DIRECTORY = os.path.abspath('.')
 print("ROOT DIRECTORY", ROOT_DIRECTORY)
-OUTPUT_DIRECTORY = os.path.abspath(os.path.join("output_images"))
+OUTPUT_DIRECTORY = os.path.abspath(os.path.join("output"))
 print("OUTPUT DIRECTORY", OUTPUT_DIRECTORY)
 
 NONE = 0
@@ -38,17 +38,17 @@ def print_img(title: str, img, show_type: int = NONE, normalize: bool = False, s
 
     if save_image:
         if title is None:
-            file_name = REZZ_IMG + JPG
+            file_name = TEST_IMG + JPG
         else:
-            file_name = REZZ_IMG + " " + title + JPG
+            file_name = TEST_IMG + "_" + title.lower().replace(" ", "_") + JPG
 
         file_path = os.path.join(OUTPUT_DIRECTORY, file_name)
         cv.imwrite(file_path, img)
 
     if title is None:
-        image_title = REZZ_IMG + JPG
+        image_title = TEST_IMG + JPG
     else:
-        image_title = REZZ_IMG + ": " + title + JPG
+        image_title = TEST_IMG + ": " + title + JPG
 
     if show_type is OPENCV:
         cv.imshow(image_title, img)
@@ -67,10 +67,10 @@ def print_img(title: str, img, show_type: int = NONE, normalize: bool = False, s
 
 
 # ======================================================================================================================
-# 2. FILTER DEMONSTRATIONS
+# Main Code
 # ======================================================================================================================
 
-imgC = cv.imread(REZZ_IMG + JPG)
+imgC = cv.imread(TEST_IMG + JPG)
 imgG = cv.cvtColor(imgC, cv.COLOR_BGR2GRAY)
 height, width, layers = imgC.shape
 
@@ -81,6 +81,8 @@ print_img("Grayscale", imgG)
 # ----------------------------------------------------------------------------------------------------------------------
 # Averaging Filters
 # ----------------------------------------------------------------------------------------------------------------------
+
+print("Averaging Filters...")
 
 avgKernel = np.full((3, 3), 1 / 9)
 avgImg = cv.filter2D(imgC, -1, avgKernel)
@@ -102,6 +104,8 @@ print_img("13x13 Average", avgImg)
 # Sobel Filters
 # ----------------------------------------------------------------------------------------------------------------------
 
+print("Sobel Filters...")
+
 sobelKernelH = np.array([
     [-1.0, -2.0, -1.0],
     [0.0,   0.0,  0.0],
@@ -121,6 +125,8 @@ print_img("Gradient Sobel", sobelImgGrad, normalize=True)
 # ----------------------------------------------------------------------------------------------------------------------
 # Laplacian Filters
 # ----------------------------------------------------------------------------------------------------------------------
+
+print("Laplacian Filters...")
 
 laplacianKernel1 = np.array([
     [0.0,  1.0, 0.0],
@@ -143,6 +149,8 @@ print_img("3x3 Laplacian #2", laplacian2, normalize=True)
 # ----------------------------------------------------------------------------------------------------------------------
 # Median Filters
 # ----------------------------------------------------------------------------------------------------------------------
+
+print("Median Filters...")
 
 medianSM = np.zeros((height, width), dtype=float)
 for y in range(1, height - 2):
@@ -171,6 +179,8 @@ print_img("7x7 Median Filter", medianLG)
 # ----------------------------------------------------------------------------------------------------------------------
 # Gaussian Filters
 # ----------------------------------------------------------------------------------------------------------------------
+
+print("Gaussian Filters...")
 
 gaussianKernelSM = np.array([
     [1.0,  2.0, 1.0],
@@ -220,6 +230,8 @@ print_img("7x7 Gaussian", gaussianLG)
 # Central Difference Filters
 # ----------------------------------------------------------------------------------------------------------------------
 
+print("Central Difference Filters...")
+
 cdKernelV = np.array([[1.0, 0.0, -1.0]])
 cdV = convolve2d(imgG, cdKernelV, mode='same', boundary='symm', fillvalue=0)
 print_img("Vertical Central Difference", cdV, normalize=True)
@@ -231,6 +243,8 @@ print_img("Horizontal Central Difference", cdH, normalize=True)
 # ----------------------------------------------------------------------------------------------------------------------
 # Prewitt Filters
 # ----------------------------------------------------------------------------------------------------------------------
+
+print("Prewitt Filters...")
 
 prewittKernelV = np.array([
     [1.0, 0.0, -1.0],
@@ -247,6 +261,8 @@ print_img("Horizontal Prewitt", prewittH, normalize=True)
 # ----------------------------------------------------------------------------------------------------------------------
 # Laplacian of Gaussian Filters
 # ----------------------------------------------------------------------------------------------------------------------
+
+print("Laplacian of Gaussian Filters...")
 
 logKernelSM = np.array([
     [0.0, 0.0,  1.0,  0.0, 0.0],
