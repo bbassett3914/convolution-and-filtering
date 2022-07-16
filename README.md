@@ -9,6 +9,18 @@ Three demos of image processing concepts.
 Given an image of a climbing wall with several color-coded paths to the top, identify three individual paths. Then enhance 
 the image so that those paths stand out from the background and are easier to identify visually.
 
+### Results:
+
+Input Image:
+
+<img alt="Input Image" width="500" height="auto" 
+src="https://github.com/brendan-bassett/Image-Processing/blob/main/Image-Enhancement/test.jpg"/>
+
+Output Image:
+
+<img alt="Final Result" width="500" height="auto" 
+src="https://github.com/brendan-bassett/Image-Processing/blob/main/Image-Enhancement/output/test_final_result.jpg"/>
+
 ### Report:
 
 I chose to convert to HSV because it puts chromaticity on a one-dimensional scale. At first I tried to work in 
