@@ -1,14 +1,12 @@
 # Image Processing
 
-Four demos of image processing concepts.
+Three demos of image processing concepts.
 
 1. Image Enhancement
 
 2. Pupil Detection
 
 3. Staff Line Detection
-
-4. Filter Demonstrations
 
 
 ## 1. Image Enhancement
@@ -92,47 +90,55 @@ the Sobel-filtered image produced an image showing where ring-shaped elements mi
 thresholding to remove all but the very most important ring location information. That left me with a single dot depicting 
 the exact center of the pupil within the original image.
 
-## 3. Filter Demonstrations
+## 3. Staff Line Detection
 
 ### Goal:
+
+Convert a poor-quality image of sheet music into full binary black and white. Then isolate and identity the staff lines.
+
+The goal is to create a foundation for converting an image of sheet music into MusicXML, “the standard open format for 
+exchanging digital sheet music. Optical music recognition is fascinating to me, because of the incredible range of source 
+materials that a OMR program must be able to decipher. Sheet music has been produced in various forms for at least 500 years. 
+It is used for nearly every physical instrument in Western music. Many musicians to this day read from copies of handwritten 
+manuscripts hundreds of years old. It is even common for musicians to play from copies of copies of copies, each adding 
+unique noise. 
+
+My inspiration came from a desire to make existing music more readable, by enhancing and converting it to a fully digital 
+format. Most current sheet music software are essentially task-specific image editing programs, where jpeg images are written 
+on with primitive digital drawing tools. How much easier would it be to read music if it could be consistently converted to 
+digital format where notes and other musical “characters” are rendered in the way that formatted text files can be.
+
+The full process from color image to MusicXML requires 4 major phases, each with its own unique problems. There is binary 
+black and white conversion, where text and the music itself is made to stand out from the white background with the highest 
+contrast possible. Then the staffs have to be identified and removed. This allows for individual notes and other musical 
+symbols to be identified and categorized. Then finally the is reconstruction, where every relevant, recognized element is 
+encoded into a digital markup language which the sheet music can later be reproduced from.
+
+This project concerns itself with the binarization of the image as well as staff identification - the first two phases. Staff 
+removal can be quite complex and falls outside the scope of this class. Symbol recognition is most successful when machine 
+learning is applied, so I am saving that part for me to tackle next semester in that class. The reconstruction and 
+reproduction of the sheet music is only possible after character recognition, so I will save that for some time in the 
+future.
 
 
 ### Results:
 
+Input:
 
-### Conclusions:
+<img alt="Input Image" width="300" height="auto" 
+src="https://github.com/brendan-bassett/Image-Processing/blob/main/Staff-Line-Detection/test.jpg"/>
 
-## 4. Filter Demonstrations
+Thresholding by Steps:
 
-### Goal:
+<img alt="Thresholding by Steps" width="300" height="auto" 
+src="https://github.com/brendan-bassett/Image-Processing/blob/main/Staff-Line-Detection/output/test_thresholding_by_steps.jpg"/>
 
-Demonstrate the filters most commonly used in image processing. Use masking for speed whenever possible.
+Adaptive THresholding:
 
-### Results:
+<img alt="Adaptive Thresholding" width="300" height="auto" 
+src="https://github.com/brendan-bassett/Image-Processing/blob/main/Staff-Line-Detection/output/test_adaptive_thresholding_by_mean.jpg"/>
 
+Staff Line Detection:
 
-### Conclusions:
-
-I chose this image beacuse it has many different textures and shapes, with lines, dots, curves and gradients of various 
-sizes. It ended up being an excellent choice, really showing what each filter affects most.
-
-For example, the average filter created a very consistent blurriness across the image, but it removed important details 
-indiscriminately. The Gaussian filter was more effective at adding blur without dramatically impacting important smaller 
-features. In the larger sizes this was ever more noticeable. It’s hard to describe but the larger Gaussian kernels seemed 
-more “natural” than the larger average filters. The median filter did not really add blur so much as it removed intense 
-spots like in the starry texture on my hoodie. It did add some blur here and there as a side-effect (like in my hair) so I 
-would want to use it carefully. Confining the filter to a certain region like the hoodie would do the trick.
-
-As for edge detection there were minor but interesting differences between each. The Sobel filter gradient stood out as quite 
-accurate. It captured many fine lines but still responded well to the larger ones. However, the vertical filter allowed 
-horizontal information in and the horizontal filter let in vertical information. That I attribute to the 1 values in the 
-corners of the 3x3 kernel. That diagonal consideration may be good to produce an accurate gradient, but it would be less 
-useful for specifically picking out only horizontal or vertical change. For that the central difference kernel was 
-surprisingly useful, though it was not very responsive. The Prewitt kernel was also useful for showing purely horizontal or 
-vertical information, though more “bleed” from one orientation to another was still clearly present.
-
-Out of the two Laplacian filters, I would choose the one with all 1s in the outer cells of the kernel. It was much more 
-responsive and showed diagonal edges much better. The one filter that truly baffled me was the Laplacian of Gaussian. It did 
-not produce very results. The smaller kernels left quite a lot of noise, so it would be hard to use it for edge detection in 
-this case. The larger kernels seemed to “sort out” the less intense edges better, but the edges interfered with each other. 
-Maybe it would be better used on an image with larger, more defined features.
+<img alt="Staff Line Detection" width="300" height="auto" 
+src="https://github.com/brendan-bassett/Image-Processing/blob/main/Staff-Line-Detection/output/test_final_result.jpg"/>
